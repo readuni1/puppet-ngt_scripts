@@ -1,0 +1,36 @@
+import pymysql.cursors
+import os
+import time
+import datetime
+dt=datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+file1 = open("<%= $log_dir %>/post-thaw.log","a+" )
+try:
+  conn = pymysql.connect (read_default_file='<%= $db_conn_file %>',
+  charset='utf8mb4',
+  cursorclass=pymysql.cursors.DictCursor )
+  cur = conn.cursor()
+  cur.execute ("select version()")
+  data = cur.fetchone()
+  file1.write ("%s\n"%dt)
+  file1.write ("-------------------------------------------\n")
+  file1.write ("-------------------------------------------\n")
+  file1.write ("\t MySQL version is %s:\n"%data)
+  file1.write ("-------------------------------------------\n")
+  file1.write ("-------------------------------------------\n")
+except:
+  file1.write ("%s\n"%dt)
+  file1.write("\t unable to connect to MySQL server\n")
+try:
+  file1.write ("%s\n"%dt)
+  file1.write ("\t executing query to unquiesce the database \n")
+  cur.execute ("unlock tables")
+  file1.write ("%s\n"%dt)
+  file1.write ("\t Database is in unquiesce mode now \n")
+except:
+  file1.write("%s\n"%dt)
+  file1.write( "\n unexpected error from MySQL, unable to unlock tables. Please check MySql error logs for more info \n")
+finally:
+  cur.close()
+  conn.close()
+  file1.close()
+
