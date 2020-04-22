@@ -33,7 +33,7 @@ class ngt_scripts (
 
   file { "${ngt_sbin}/pre_freeze":
     ensure => 'file',
-    content => epp('pre_freeze.epp', {
+    content => epp('ngt_scripts/pre_freeze.epp', {
        'log_dir' => $log_dir,
        'script_dir' => $script_dir,
      }),
@@ -43,7 +43,7 @@ class ngt_scripts (
 
   file { "${ngt_sbin}/post_thaw":
     ensure => 'file',
-    content => epp('post_thaw.epp', {
+    content => epp('ngt_scripts/post_thaw.epp', {
        'log_dir' => $log_dir,
        'script_dir' => $script_dir,
      }),
@@ -53,7 +53,7 @@ class ngt_scripts (
 
   file { "${script_dir}/quiesce.py":
     ensure => 'file',
-    content => epp('quiesce.epp', {
+    content => epp('ngt_scripts/quiesce.epp', {
        'log_dir' => $log_dir,
        'db_conn_file' => $db_conn_file,
      }),
@@ -63,7 +63,7 @@ class ngt_scripts (
 
   file { "${script_dir}/unquiesce.py":
     ensure => 'file',
-    content => epp('unquiesce.epp', {
+    content => epp('ngt_scripts/unquiesce.epp', {
        'log_dir' => $log_dir,
        'db_conn_file' => $db_conn_file,
      }),
