@@ -1,7 +1,7 @@
 #!/bin/sh
 #pre-freeze-script
-date >> '<%= $log_dir %>/pre_root.log'
-echo -e "\n attempting to run pre-freeze script for MySQL as root user\n" >> <%= $log_dir %>/pre_root.log
+date >> '<%= $log_dir %>/pre_freeze.log'
+echo -e "\n attempting to run pre-freeze script for MySQL as root user\n" >> <%= $log_dir %>/pre_freeze.log
 if [ "$(id -u)" -eq "0" ]; then
   python '<%= $script_dir %>/quiesce.py'
   if [ $? -ne 0 ]
@@ -12,6 +12,6 @@ if [ "$(id -u)" -eq "0" ]; then
   echo -e "\n executing query flush tables with read lock to quiesce the database\n" >> <%= $log_dir %>/pre-freeze.log
   echo -e "\n Database is in quiesce mode now\n" >> <%= $log_dir %>/pre-freeze.log
 else
-  date >> '<%= $log_dir %>/pre_root.log'
-  echo -e "not root user\n" >> '<%= $log_dir %>/pre_root.log'
+  date >> '<%= $log_dir %>/pre_freeze.log'
+  echo -e "not root user\n" >> '<%= $log_dir %>/pre_freeze.log'
 fi
