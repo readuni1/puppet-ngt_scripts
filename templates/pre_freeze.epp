@@ -1,0 +1,20 @@
+#!/bin/sh
+#pre-freeze-script
+date >> '<%= $log_dir %>/pre_freeze.log'
+if [ "$(id -u)" -eq "0" ]; then
+  if [ -r '<%= $script_dir %>/quiesce.py' ]; then
+    echo -e "\n attempting to run pre-freeze script <%= $script_dir %>/quiesce.py as root user\n" >> <%= $log_dir %>/pre_freeze.log
+    python '<%= $script_dir %>/quiesce.py'
+    if [ $? -ne 0 ]
+    then
+      echo -e "\n Unable to quiesce\n" >> <%= $log_dir %>/pre-freeze.log
+      exit 1
+    fi
+    echo -e "\n In quiesce mode now\n" >> <%= $log_dir %>/pre-freeze.log
+  else
+    echo -e "\n pre-freeze script <%= $script_dir %>/quiesce.py not found\n" >> <%= $log_dir %>/pre_freeze.log
+  fi
+else
+  date >> '<%= $log_dir %>/pre_freeze.log'
+  echo -e "not root user\n" >> '<%= $log_dir %>/pre_freeze.log'
+fi

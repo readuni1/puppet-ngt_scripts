@@ -1,0 +1,20 @@
+#!/bin/sh
+#post-thaw-script
+date >> '<%= $log_dir %>/post_root.log'
+if [ "$(id -u)" -eq "0" ]; then
+  if [ -r '<%= $script_dir %>/unquiesce.py' ]; then
+    echo -e "\n attempting to run post-thaw script <%= $script_dir %>/unquiesce.py as root user\n" >> <%= $log_dir %>/post_root.log
+    python '<%= $script_dir %>/unquiesce.py'
+    if [ $? -ne 0 ]
+    then
+      date >> '<%= $log_dir %>/post_root.log'
+      echo -e "\n Unable to unquiesce MySQL DB\n" >> '<%= $log_dir %>/post_root.log'
+      exit 1
+    fi
+  else
+    echo -e "\n No post-thaw script <%= $script_dir %>/unquiesce.py\n" >> <%= $log_dir %>/post_root.log
+  fi
+else
+  date >> '<%= $log_dir %>/post_root.log'
+  echo -e "not root user\n" >> '<%= $log_dir %>/post_root.log'
+fi
